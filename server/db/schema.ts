@@ -2,6 +2,7 @@ import { sql } from 'drizzle-orm'
 import {
   boolean,
   check,
+  date,
   index,
   integer,
   pgEnum,
@@ -70,18 +71,27 @@ export const maps = pgTable('maps', {
   in2v8: boolean('in_2v8').notNull().default(false),
 })
 
-// Players who play the second killer with Saw in 2v8.
+// Players who play the second killer with Saw in 2v8. Archived mates are hidden from the
+// game form but stay in the stats.
 export const mates = pgTable('mates', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull().unique(),
+  archived: boolean('archived').notNull().default(false),
 })
 
 // In-game events and limited-time modes (Noël 2024, Chaos Shuffle, ...), an optional
-// label on a 1v4 game.
-export const events = pgTable('events', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  name: text('name').notNull().unique(),
-})
+// label on a 1v4 game. The game form preselects the event whose dates include today.
+export const events = pgTable(
+  'events',
+  {
+    id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+    name: text('name').notNull().unique(),
+    // Days in Europe/Paris, both included. Null for modes with no fixed dates.
+    startsOn: date('starts_on'),
+    endsOn: date('ends_on'),
+  },
+  (t) => [check('events_dates', sql`${t.endsOn} >= ${t.startsOn}`)],
+)
 
 const IS_2V8 = sql.raw(`mode in ('2v8_survivor', '2v8_killer')`)
 const SAW_KILLER = sql.raw(`mode = '2v8_killer'`)

@@ -1,5 +1,5 @@
 <template>
   <AdminPage title="Cartes">
-    <UEmpty icon="i-lucide-hammer" title="Bientôt disponible" />
+    <AdminReferenceTable list="maps" />
   </AdminPage>
 </template>

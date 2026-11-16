@@ -1,5 +1,5 @@
 <template>
   <AdminPage title="Événements">
-    <UEmpty icon="i-lucide-hammer" title="Bientôt disponible" />
+    <AdminReferenceTable list="events" />
   </AdminPage>
 </template>

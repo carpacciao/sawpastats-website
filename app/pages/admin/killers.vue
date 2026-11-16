@@ -1,5 +1,5 @@
 <template>
   <AdminPage title="Tueurs">
-    <UEmpty icon="i-lucide-hammer" title="Bientôt disponible" />
+    <AdminReferenceTable list="killers" />
   </AdminPage>
 </template>

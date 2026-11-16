@@ -15,6 +15,13 @@
       "when": 1794840886278,
       "tag": "0001_peaceful_captain_cross",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794843862173,
+      "tag": "0002_worried_risque",
+      "breakpoints": true
     }
   ]
 }

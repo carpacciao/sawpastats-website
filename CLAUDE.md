@@ -38,11 +38,15 @@ Stats site for the streamer **Sawpalin**, who plays **Dead by Daylight (DBD)**. 
 app/
   pages/          index (public), login, admin.vue (parent of every admin/ page) + admin/
   layouts/        admin.vue (sidebar), used by every /admin page
-  components/     admin/Page.vue wraps each admin screen (panel + title bar)
+  components/     admin/Page.vue wraps each admin screen (panel + title bar),
+                  admin/ReferenceTable.vue is the killers / maps / mates / events editor
+  composables/    useAdminReference() (the four lists with usage counts, shared cache)
   middleware/     admin.ts (protects /admin), guest.ts (keeps logged-in visitors off /login)
-shared/           imported by app/ and server/: enums.ts (enum values), labels.ts (French labels)
+shared/           imported by app/ and server/: enums.ts (enum values), labels.ts (French labels),
+                  dates.ts (days in Europe/Paris, active event)
 server/
   api/            routes, named <name>.<method>.ts (health.get.ts, auth/login.post.ts, ...)
+                  admin/[list]/... edits killers, maps, mates, events (server/utils/reference.ts)
   db/             client.ts (useDb()), schema.ts (tables)
   utils/          auto-imported helpers: password hashing, sessions, requireAdmin()
 drizzle/          generated migrations (committed, never edited by hand)
