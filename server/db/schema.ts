@@ -10,6 +10,14 @@ import {
   text,
   timestamp,
 } from 'drizzle-orm/pg-core'
+import {
+  FUN,
+  GAME_MODES,
+  GAMEPLAY_TAGS,
+  HOOK_SKIPS,
+  KILLER_BEHAVIORS,
+  PARTY_SIZES,
+} from '../../shared/enums'
 
 // The single shared admin account: exactly one row, id = 1.
 export const admin = pgTable(
@@ -29,40 +37,25 @@ export const sessions = pgTable('sessions', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
-// Stats. Enum values are code identifiers; the French labels live in the app.
+// Stats. Enum values are code identifiers (shared/enums.ts); the French labels are in
+// shared/labels.ts.
 
 // What Saw played. Limited-time modes (Chaos Shuffle, Lights Out, ...) are 1v4 events.
-export const gameMode = pgEnum('game_mode', ['1v4', '2v8_survivor', '2v8_killer'])
+export const gameMode = pgEnum('game_mode', GAME_MODES)
 
 // Who Saw played with. 'viewers' is always 4 people in 1v4, an unknown number in 2v8.
-export const partySize = pgEnum('party_size', [
-  'solo',
-  'duo',
-  'trio',
-  'quatuor',
-  'quintette',
-  'sextuor',
-  'septuor',
-  'octuor',
-  'viewers',
-])
+export const partySize = pgEnum('party_size', PARTY_SIZES)
 
 // An empty list means "Normal". 'fairplay' only applies when Saw is the killer.
-export const gameplayTag = pgEnum('gameplay_tag', ['tunnel', 'slug', 'camp', 'cheater', 'fairplay'])
+export const gameplayTag = pgEnum('gameplay_tag', GAMEPLAY_TAGS)
 
 // The killer side of the sheet's "Abandons" column; the survivor count is separate.
-export const killerBehavior = pgEnum('killer_behavior', [
-  'ragequit',
-  'abandon',
-  'afk',
-  'friendly',
-  'ragequit_abandon',
-])
+export const killerBehavior = pgEnum('killer_behavior', KILLER_BEHAVIORS)
 
 // Hook phases skipped because nobody came for the unhook.
-export const hookSkip = pgEnum('hook_skip', ['none', 'p1', 'p1_p2', 'p2_p3', 'p1_p2_p3'])
+export const hookSkip = pgEnum('hook_skip', HOOK_SKIPS)
 
-export const fun = pgEnum('fun', ['yes', 'normal', 'no'])
+export const fun = pgEnum('fun', FUN)
 
 // Every killer is available in 1v4; only some of them in 2v8.
 export const killers = pgTable('killers', {
