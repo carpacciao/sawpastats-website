@@ -80,15 +80,21 @@ export async function readFields(event: H3Event, fields: z.ZodObject, partial = 
   return result.data
 }
 
-// Turns the Postgres errors the admin can cause into API errors.
-export function toApiError(error: unknown) {
+// The Postgres error code of a failed query, if any (drizzle wraps the driver's error).
+export function pgErrorCode(error: unknown) {
   let cause: unknown = error
   while (cause && typeof cause === 'object') {
     const code = (cause as { code?: unknown }).code
-    if (code === '23505') return createError({ statusCode: 409, statusMessage: 'Name already used' })
-    if (code === '23503') return createError({ statusCode: 409, statusMessage: 'Still used by games' })
-    if (code === '23514') return createError({ statusCode: 400, statusMessage: 'Invalid fields' })
+    if (typeof code === 'string') return code
     cause = (cause as { cause?: unknown }).cause
   }
+}
+
+// Turns the Postgres errors the admin can cause into API errors.
+export function toApiError(error: unknown) {
+  const code = pgErrorCode(error)
+  if (code === '23505') return createError({ statusCode: 409, statusMessage: 'Name already used' })
+  if (code === '23503') return createError({ statusCode: 409, statusMessage: 'Still used by games' })
+  if (code === '23514') return createError({ statusCode: 400, statusMessage: 'Invalid fields' })
   return error
 }

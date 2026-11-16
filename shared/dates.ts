@@ -22,3 +22,41 @@ export function formatDay(day: string) {
     year: 'numeric',
   })
 }
+
+// Date -> '2026-11-16T14:03', the wall time in Paris, as <input type="datetime-local">
+// reads and writes it.
+export function toParisInput(date: Date) {
+  return date
+    .toLocaleString('sv-SE', {
+      timeZone: TIME_ZONE,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    })
+    .replace(' ', 'T')
+}
+
+// '2026-11-16T14:03' in Paris -> Date. Starts from the same wall time in UTC and shifts
+// it by Paris' offset (twice, in case the first guess lands across a DST change).
+export function fromParisInput(value: string) {
+  const target = new Date(`${value}:00Z`).getTime()
+  let time = target
+  for (let i = 0; i < 2; i++) {
+    time -= new Date(`${toParisInput(new Date(time))}:00Z`).getTime() - target
+  }
+  return new Date(time)
+}
+
+// Date -> '16 nov. 2026, 14:03'
+export function formatDateTime(date: Date | string) {
+  return new Date(date).toLocaleString('fr-FR', {
+    timeZone: TIME_ZONE,
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}

@@ -39,11 +39,15 @@ app/
   pages/          index (public), login, admin.vue (parent of every admin/ page) + admin/
   layouts/        admin.vue (sidebar), used by every /admin page
   components/     admin/Page.vue wraps each admin screen (panel + title bar),
-                  admin/ReferenceTable.vue is the killers / maps / mates / events editor
+                  admin/ReferenceTable.vue is the killers / maps / mates / events editor,
+                  admin/GameForm.vue adds and edits games, admin/Choice.vue + Tags.vue are its
+                  one-tap inputs
   composables/    useAdminReference() (the four lists with usage counts, shared cache)
+  utils/          gameDraft.ts: the game form's state and its conversions to and from the API
   middleware/     admin.ts (protects /admin), guest.ts (keeps logged-in visitors off /login)
 shared/           imported by app/ and server/: enums.ts (enum values), labels.ts (French labels),
-                  dates.ts (days in Europe/Paris, active event)
+                  dates.ts (Europe/Paris days and times, active event), game.ts (the game
+                  schema, used by the form and the API)
 server/
   api/            routes, named <name>.<method>.ts (health.get.ts, auth/login.post.ts, ...)
                   admin/[list]/... edits killers, maps, mates, events (server/utils/reference.ts)
