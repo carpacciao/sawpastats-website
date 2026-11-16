@@ -249,7 +249,8 @@ const eventItems = computed(() =>
   ),
 )
 
-// The select's "clear" sets undefined; the draft uses null for "no event".
+// The select works with undefined for "nothing selected" (its clear button sets null);
+// the draft always uses null for "no event".
 const eventId = computed({
   get: () => draft.eventId ?? undefined,
   set: (value) => (draft.eventId = value ?? null),
@@ -332,7 +333,7 @@ async function submit(next: boolean) {
     } else {
       await $fetch(`/api/admin/games/${props.gameId}`, { method: 'PUT', body: result.data })
       toast.add({ title: 'Partie modifiée', color: 'success', icon: 'i-lucide-check' })
-      await navigateTo('/admin/games')
+      await leave()
     }
   } catch {
     failed()
@@ -368,12 +369,19 @@ function savedToast(id: number) {
   })
 }
 
+// Back to where the edit was opened from (the filtered list), or to the list.
+const router = useRouter()
+async function leave() {
+  if (window.history.state?.back) router.back()
+  else await navigateTo('/admin/games')
+}
+
 async function remove() {
   saving.value = true
   try {
     await $fetch(`/api/admin/games/${props.gameId}`, { method: 'DELETE' })
     toast.add({ title: 'Partie supprimée', color: 'success', icon: 'i-lucide-check' })
-    await navigateTo('/admin/games')
+    await leave()
   } catch {
     failed()
   } finally {

@@ -51,6 +51,8 @@ shared/           imported by app/ and server/: enums.ts (enum values), labels.t
 server/
   api/            routes, named <name>.<method>.ts (health.get.ts, auth/login.post.ts, ...)
                   admin/[list]/... edits killers, maps, mates, events (server/utils/reference.ts)
+                  admin/games/... list (filters + pages), CSV export, add, edit, delete
+                  (server/utils/gameList.ts, game.ts)
   db/             client.ts (useDb()), schema.ts (tables)
   utils/          auto-imported helpers: password hashing, sessions, requireAdmin()
 drizzle/          generated migrations (committed, never edited by hand)
