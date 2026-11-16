@@ -2,14 +2,14 @@
   <main class="min-h-screen flex items-center justify-center p-4">
     <UCard class="w-full max-w-sm">
       <template #header>
-        <h1 class="text-xl font-semibold">Login</h1>
+        <h1 class="text-xl font-semibold">Connexion</h1>
       </template>
 
       <form class="flex flex-col gap-4" @submit.prevent="login">
         <!-- Lets password managers save the shared password under "admin" -->
         <input type="text" name="username" autocomplete="username" value="admin" class="hidden" aria-hidden="true" tabindex="-1">
 
-        <UFormField label="Password" name="password">
+        <UFormField label="Mot de passe" name="password">
           <UInput
             v-model="password"
             type="password"
@@ -22,7 +22,7 @@
 
         <UAlert v-if="error" color="error" variant="subtle" :title="error" />
 
-        <UButton type="submit" block :loading="loading">Log in</UButton>
+        <UButton type="submit" block :loading="loading">Se connecter</UButton>
       </form>
     </UCard>
   </main>
@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 definePageMeta({ middleware: 'guest' })
-useSeoMeta({ title: 'Login · sawpastats', robots: 'noindex' })
+useSeoMeta({ title: 'Connexion · sawpastats', robots: 'noindex' })
 
 const password = ref('')
 const error = ref('')
@@ -46,7 +46,7 @@ async function login() {
     await navigateTo('/admin')
   } catch (e) {
     const status = (e as { statusCode?: number }).statusCode
-    error.value = status === 401 ? 'Wrong password' : 'Something went wrong'
+    error.value = status === 401 ? 'Mot de passe incorrect' : 'Une erreur est survenue'
     password.value = ''
   } finally {
     loading.value = false

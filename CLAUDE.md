@@ -2,6 +2,8 @@
 
 Stats site for the streamer **Sawpalin**, who plays **Dead by Daylight (DBD)**. Everything must stay on free tiers, with no paid usage.
 
+**The audience is French-speaking**: every text a visitor sees is written in French.
+
 - **Showcase** (public): tables and charts of all games. Games can be played in several game modes.
 - **Ingestion** (`/admin`, login required): where Sawpalin adds the stats of a game he played.
 - **API**: Nuxt server routes that read and write the stats in Neon.
@@ -49,9 +51,15 @@ scripts/          run locally with tsx, never deployed
 - **Sessions**: the `sessions` table stores only a SHA-256 hash of each token. The `sid` cookie is `HttpOnly`, `SameSite=Lax` and `Secure` in production, and lasts 30 days.
 - **Protecting a route**: every admin-only API route must call `await requireAdmin(event)`. The page guards in `app/middleware/` only control which screen is shown; they don't protect data.
 - **No public links**: the homepage must not link to `/login` or `/admin`.
+- **Brute force**: a random password can't be guessed, so the risk is quota, not access. Each login attempt costs a Vercel function call, a deliberately slow scrypt check and one Neon query. Failed attempts write nothing to the database. Going over the free quota pauses Vercel or suspends Neon until the next cycle; it never costs money. Login rate limiting belongs in Vercel's Firewall (a rate-limit rule on `/api/auth/login`), not in app code: functions don't share memory, and a counter in Neon would add a query per attempt.
 
 ## Conventions
 
+- **Language**:
+  - Interface in French: page text, titles, labels, error messages.
+  - `<html lang="fr">` is set in `nuxt.config.ts`, and Nuxt UI uses its `fr` locale (`<UApp :locale="fr">` in `app/app.vue`).
+  - Dates and times use `fr-FR` with an explicit time zone (`Europe/Paris`), so the server and the browser render the same text.
+  - Code, comments, commit messages and API error messages stay in English.
 - Database changes: edit `server/db/schema.ts`, run `pnpm db:generate`, then `pnpm db:migrate`. Migrations run from a local machine, never during the Vercel build.
 - Server code imports the database with relative paths (`../db/client`), so the files in `scripts/` can import it too.
 - TypeScript stays on 5.x, because `vue-tsc` can't run on TypeScript 7 yet.

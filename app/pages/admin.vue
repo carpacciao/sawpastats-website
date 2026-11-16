@@ -1,15 +1,15 @@
 <template>
   <main class="min-h-screen flex flex-col items-center justify-center gap-6 p-4">
-    <h1 class="text-2xl font-semibold">Admin</h1>
+    <h1 class="text-2xl font-semibold">Administration</h1>
     <UButton icon="i-lucide-log-out" color="neutral" variant="outline" :loading="loading" @click="logout">
-      Log out
+      Se déconnecter
     </UButton>
   </main>
 </template>
 
 <script setup lang="ts">
 definePageMeta({ middleware: 'admin' })
-useSeoMeta({ title: 'Admin · sawpastats', robots: 'noindex' })
+useSeoMeta({ title: 'Administration · sawpastats', robots: 'noindex' })
 
 const loading = ref(false)
 
