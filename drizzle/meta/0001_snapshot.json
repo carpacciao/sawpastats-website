@@ -1,0 +1,716 @@
+{
+  "id": "ac0a5f2e-e418-4310-9844-bb8999c9d11e",
+  "prevId": "f6945690-6b65-478d-90b3-6798fe046f35",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.admin": {
+      "name": "admin",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "default": 1
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "admin_single_row": {
+          "name": "admin_single_row",
+          "value": "\"admin\".\"id\" = 1"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.events": {
+      "name": "events",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "events_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "events_name_unique": {
+          "name": "events_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.games": {
+      "name": "games",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "games_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "mode": {
+          "name": "mode",
+          "type": "game_mode",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "played_at": {
+          "name": "played_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "party": {
+          "name": "party",
+          "type": "party_size",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "map_id": {
+          "name": "map_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "killer_id": {
+          "name": "killer_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "killer2_id": {
+          "name": "killer2_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mate_id": {
+          "name": "mate_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gameplay": {
+          "name": "gameplay",
+          "type": "gameplay_tag[]",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'"
+        },
+        "ignored_survivors": {
+          "name": "ignored_survivors",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "mate_gameplay": {
+          "name": "mate_gameplay",
+          "type": "gameplay_tag[]",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'"
+        },
+        "escapes": {
+          "name": "escapes",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "survivor_abandons": {
+          "name": "survivor_abandons",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "killer_behavior": {
+          "name": "killer_behavior",
+          "type": "killer_behavior",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "saw_escaped": {
+          "name": "saw_escaped",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hatch_escape": {
+          "name": "hatch_escape",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hook_skip": {
+          "name": "hook_skip",
+          "type": "hook_skip",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bots": {
+          "name": "bots",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "generators_left": {
+          "name": "generators_left",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fun": {
+          "name": "fun",
+          "type": "fun",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "games_mode_idx": {
+          "name": "games_mode_idx",
+          "columns": [
+            {
+              "expression": "mode",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "games_map_idx": {
+          "name": "games_map_idx",
+          "columns": [
+            {
+              "expression": "map_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "games_killer_idx": {
+          "name": "games_killer_idx",
+          "columns": [
+            {
+              "expression": "killer_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "games_killer2_idx": {
+          "name": "games_killer2_idx",
+          "columns": [
+            {
+              "expression": "killer2_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "games_event_idx": {
+          "name": "games_event_idx",
+          "columns": [
+            {
+              "expression": "event_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "games_event_id_events_id_fk": {
+          "name": "games_event_id_events_id_fk",
+          "tableFrom": "games",
+          "tableTo": "events",
+          "columnsFrom": [
+            "event_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "games_map_id_maps_id_fk": {
+          "name": "games_map_id_maps_id_fk",
+          "tableFrom": "games",
+          "tableTo": "maps",
+          "columnsFrom": [
+            "map_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "games_killer_id_killers_id_fk": {
+          "name": "games_killer_id_killers_id_fk",
+          "tableFrom": "games",
+          "tableTo": "killers",
+          "columnsFrom": [
+            "killer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "games_killer2_id_killers_id_fk": {
+          "name": "games_killer2_id_killers_id_fk",
+          "tableFrom": "games",
+          "tableTo": "killers",
+          "columnsFrom": [
+            "killer2_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "games_mate_id_mates_id_fk": {
+          "name": "games_mate_id_mates_id_fk",
+          "tableFrom": "games",
+          "tableTo": "mates",
+          "columnsFrom": [
+            "mate_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {
+        "games_counts": {
+          "name": "games_counts",
+          "value": "\"games\".\"escapes\" between 0 and (case when mode in ('2v8_survivor', '2v8_killer') then 8 else 4 end)\n        and \"games\".\"survivor_abandons\" between 0 and (case when mode in ('2v8_survivor', '2v8_killer') then 8 else 4 end)\n        and \"games\".\"generators_left\" between 0 and (case when mode in ('2v8_survivor', '2v8_killer') then 8 else 5 end)\n        and (\"games\".\"bots\" is null or \"games\".\"bots\" between 0 and 8)\n        and \"games\".\"ignored_survivors\" between 0 and (case when mode in ('2v8_survivor', '2v8_killer') then 0 else 2 end)"
+        },
+        "games_event_1v4": {
+          "name": "games_event_1v4",
+          "value": "\"games\".\"event_id\" is null or not mode in ('2v8_survivor', '2v8_killer')"
+        },
+        "games_2v8_fields": {
+          "name": "games_2v8_fields",
+          "value": "(mode in ('2v8_survivor', '2v8_killer')) = (\"games\".\"killer2_id\" is not null) and (mode in ('2v8_survivor', '2v8_killer')) = (\"games\".\"bots\" is not null)"
+        },
+        "games_party": {
+          "name": "games_party",
+          "value": "case\n        when mode = '2v8_killer' then \"games\".\"party\" is null\n        when mode in ('2v8_survivor', '2v8_killer') then \"games\".\"party\" is not null\n        else \"games\".\"party\" in ('solo', 'duo', 'trio', 'quatuor', 'viewers')\n      end"
+        },
+        "games_survivor_fields": {
+          "name": "games_survivor_fields",
+          "value": "(not mode = '2v8_killer') = (\"games\".\"saw_escaped\" is not null)\n        and (not mode = '2v8_killer') = (\"games\".\"hatch_escape\" is not null)\n        and (not mode = '2v8_killer') = (\"games\".\"hook_skip\" is not null)"
+        },
+        "games_killer_fields": {
+          "name": "games_killer_fields",
+          "value": "mode = '2v8_killer' or (\"games\".\"mate_id\" is null\n        and cardinality(\"games\".\"mate_gameplay\") = 0\n        and not 'fairplay' = any(\"games\".\"gameplay\"))"
+        },
+        "games_survivor_only": {
+          "name": "games_survivor_only",
+          "value": "not mode = '2v8_killer' or \"games\".\"killer_behavior\" is null"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.killers": {
+      "name": "killers",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "killers_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "in_2v8": {
+          "name": "in_2v8",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "killers_name_unique": {
+          "name": "killers_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.maps": {
+      "name": "maps",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "maps_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "in_2v8": {
+          "name": "in_2v8",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "maps_name_unique": {
+          "name": "maps_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.mates": {
+      "name": "mates",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "mates_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "mates_name_unique": {
+          "name": "mates_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.sessions": {
+      "name": "sessions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "sessions_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "token_hash": {
+          "name": "token_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "sessions_token_hash_unique": {
+          "name": "sessions_token_hash_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "token_hash"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.fun": {
+      "name": "fun",
+      "schema": "public",
+      "values": [
+        "yes",
+        "normal",
+        "no"
+      ]
+    },
+    "public.game_mode": {
+      "name": "game_mode",
+      "schema": "public",
+      "values": [
+        "1v4",
+        "2v8_survivor",
+        "2v8_killer"
+      ]
+    },
+    "public.gameplay_tag": {
+      "name": "gameplay_tag",
+      "schema": "public",
+      "values": [
+        "tunnel",
+        "slug",
+        "camp",
+        "cheater",
+        "fairplay"
+      ]
+    },
+    "public.hook_skip": {
+      "name": "hook_skip",
+      "schema": "public",
+      "values": [
+        "none",
+        "p1",
+        "p1_p2",
+        "p2_p3",
+        "p1_p2_p3"
+      ]
+    },
+    "public.killer_behavior": {
+      "name": "killer_behavior",
+      "schema": "public",
+      "values": [
+        "ragequit",
+        "abandon",
+        "afk",
+        "friendly",
+        "ragequit_abandon"
+      ]
+    },
+    "public.party_size": {
+      "name": "party_size",
+      "schema": "public",
+      "values": [
+        "solo",
+        "duo",
+        "trio",
+        "quatuor",
+        "quintette",
+        "sextuor",
+        "septuor",
+        "octuor",
+        "viewers"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

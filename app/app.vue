@@ -1,6 +1,8 @@
 <template>
   <UApp :locale="fr">
-    <NuxtPage />
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </UApp>
 </template>
 

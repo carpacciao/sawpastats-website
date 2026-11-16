@@ -1,5 +1,5 @@
 import { createHash, randomBytes } from 'node:crypto'
-import { and, eq, gt, ne } from 'drizzle-orm'
+import { and, eq, gt } from 'drizzle-orm'
 import type { H3Event } from 'h3'
 import { schema, useDb } from '../db/client'
 
@@ -50,8 +50,4 @@ export async function deleteSession(event: H3Event) {
     await useDb().delete(schema.sessions).where(eq(schema.sessions.tokenHash, hashToken(token)))
   }
   deleteCookie(event, COOKIE_NAME, { path: '/' })
-}
-
-export async function deleteOtherSessions(keepId: number) {
-  await useDb().delete(schema.sessions).where(ne(schema.sessions.id, keepId))
 }

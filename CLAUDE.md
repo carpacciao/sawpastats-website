@@ -27,6 +27,8 @@ Stats site for the streamer **Sawpalin**, who plays **Dead by Daylight (DBD)**. 
 | `pnpm db:generate` | Writes a new SQL migration into `drizzle/` from changes to `server/db/schema.ts`. |
 | `pnpm db:migrate` | Applies pending migrations to the Neon database in `.env`. |
 | `pnpm db:studio` | Opens Drizzle Studio to browse the database. |
+| `pnpm db:seed` | Adds the missing killers, maps, mates and events (`scripts/reference.ts`). Never overwrites existing rows. |
+| `pnpm db:import-sheet <file.xlsx>` | Imports the games of the Google Sheet export. `--dry-run` only checks the file, `--replace` deletes every game first. |
 | `pnpm admin:set-password <pw>` | Sets the admin password and logs out every session. |
 | `pnpm admin:set-password --generate` | Same, with a random password that is printed once. |
 
@@ -34,15 +36,29 @@ Stats site for the streamer **Sawpalin**, who plays **Dead by Daylight (DBD)**. 
 
 ```
 app/
-  pages/          index (public), login, admin
+  pages/          index (public), login, admin.vue (parent of every admin/ page) + admin/
+  layouts/        admin.vue (sidebar), used by every /admin page
+  components/     admin/Page.vue wraps each admin screen (panel + title bar),
+                  admin/ReferenceTable.vue is the killers / maps / mates / events editor,
+                  admin/GameForm.vue adds and edits games, admin/Choice.vue + Tags.vue are its
+                  one-tap inputs
+  composables/    useAdminReference() (the four lists with usage counts, shared cache)
+  utils/          gameDraft.ts: the game form's state and its conversions to and from the API
   middleware/     admin.ts (protects /admin), guest.ts (keeps logged-in visitors off /login)
+shared/           imported by app/ and server/: enums.ts (enum values), labels.ts (French labels),
+                  dates.ts (Europe/Paris days and times, active event), game.ts (the game
+                  schema, used by the form and the API)
 server/
   api/            routes, named <name>.<method>.ts (health.get.ts, auth/login.post.ts, ...)
+                  admin/[list]/... edits killers, maps, mates, events (server/utils/reference.ts)
+                  admin/games/... list (filters + pages), CSV export, add, edit, delete
+                  (server/utils/gameList.ts, game.ts)
   db/             client.ts (useDb()), schema.ts (tables)
   utils/          auto-imported helpers: password hashing, sessions, requireAdmin()
 drizzle/          generated migrations (committed, never edited by hand)
 scripts/          run locally with tsx, never deployed
-  import-sheet/   reserved for importing the existing Google Sheet stats
+  reference.ts    killers, maps, mates and events, seeded by db:seed and the import
+  import-sheet/   one-off import of the existing Google Sheet stats
 ```
 
 ## Auth
